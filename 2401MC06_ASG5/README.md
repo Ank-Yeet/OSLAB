@@ -16,7 +16,7 @@ OSLAB/
 │   ├── syscall.h       # System call number definitions
 │   ├── syscall.c       # System call vector table pointers
 │   └── vm.c            # Modified deallocuvm to protect shared memory page (0x60000000)
-├── User/
+├── USER/
 │   ├── user.h          # System call user declarations
 │   ├── usys.pl         # System call entry stubs
 │   ├── peterson.c      # Question 1: Mutual Exclusion via Peterson's Algorithm
