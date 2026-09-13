@@ -1,0 +1,70 @@
+================================================================
+ Combined Synchronization & Deadlock Avoidance (Q4)
+================================================================
+
+Setup
+-----
+5 processes (P0–P4) each repeatedly need 2 of 3 shared resource pools to
+complete a unit of work:
+
+    Resource   Instances   Needed by
+    --------   ---------   ---------
+    Scanner    1           P0, P2, P4
+    Printer    2           P0, P1, P3, P4
+    Disk       2           P1, P2, P3
+
+    P0, P4  -> Scanner + Printer
+    P1, P3  -> Printer + Disk
+    P2      -> Scanner + Disk
+
+Each pool is protected by a counting semaphore (sem_init/sem_wait/sem_post)
+sized to its instance count, so mutual exclusion and correct sharing of
+each pool are guaranteed by the semaphore itself.
+
+Strategy Chosen: Strict Resource Ordering (Hierarchical Allocation)
+--------------------------------------------------------------------
+This reuses the technique from Q3, generalized to three resources. A fixed
+global rank is assigned:
+
+    1. Scanner   (acquired first, if needed)
+    2. Printer   (acquired second, if needed)
+    3. Disk      (acquired last, if needed)
+
+Every process is required to request its two resources in increasing rank
+order, regardless of which pair it needs:
+
+    - P0, P4  need Scanner + Printer -> request Scanner, then Printer
+    - P2      needs Scanner + Disk   -> request Scanner, then Disk
+    - P1, P3  need Printer + Disk    -> request Printer, then Disk
+
+Why This Prevents Deadlock
+---------------------------
+A deadlock among these processes would require a cycle in the
+resource-allocation graph — some process holding a higher-ranked resource
+while waiting on a lower-ranked one that is held by a process which is, in
+turn, waiting on the first process's resource.
+
+Because every process acquires resources in non-decreasing rank order, a
+process can never be holding a resource of rank k while requesting one of
+rank < k. Any wait a process performs is always for a resource ranked
+*at or above* everything it currently holds. This is exactly the invariant
+that rules out circular wait: for a cycle to close, some process in the
+chain would have to violate the ordering, which is impossible by
+construction. The same argument used for the 2-lock case in Q3 extends
+directly to these 3 resource types.
+
+An alternative would have been a Banker's-Algorithm-style admission check
+(as in Q1) before granting each resource — computing whether granting the
+request could still leave a safe state. Resource ordering was chosen here
+because the resource-usage pattern is static and known in advance (each
+process's pair of resources never changes), making a simple ordering rule
+sufficient and much cheaper than running a safety algorithm before every
+acquisition.
+
+Result
+------
+Across multiple work cycles (see syncdeadlock_log.txt), all 5 processes
+interleave their requests, grants, work, and releases and every process
+completes all cycles — no process is ever permanently blocked, and no pool
+is ever over-allocated beyond its instance count.
+================================================================

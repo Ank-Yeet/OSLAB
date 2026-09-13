@@ -1,0 +1,54 @@
+================================================================
+ Deadlock Prevention via Resource Ordering (Q3)
+================================================================
+
+The Problem
+-----------
+A deadlock requires four conditions to hold simultaneously (the Coffman
+conditions): mutual exclusion, hold-and-wait, no preemption, and circular
+wait. Of these, circular wait is the only one that can be eliminated purely
+by policy — by controlling the *order* in which resources are requested —
+without touching mutual exclusion, preemption, or hold-and-wait behavior.
+
+In resorder_bad.c, Process A acquires Lock1 then requests Lock2, while
+Process B acquires Lock2 then requests Lock1. With the deliberate delay
+between acquisitions, both processes are guaranteed to be holding their
+first lock when they attempt to acquire their second — producing exactly
+the classic circular-wait pattern:
+
+    Process A: holds Lock1, waits for Lock2
+    Process B: holds Lock2, waits for Lock1
+
+Neither process can proceed, and neither can release what it holds, so the
+system hangs indefinitely (see resourceorder_log.txt).
+
+The Fix: A Strict Global Order
+-------------------------------
+resorder_fixed.c assigns a total order to the resources: Lock1 is always
+acquired before Lock2, by every process, with no exceptions. This is
+sufficient to make circular wait impossible.
+
+Proof sketch: suppose a cycle existed among processes holding and
+requesting these two locks. Some process would have to hold Lock2 while
+requesting Lock1. But under the global ordering rule, any process that
+needs both locks must acquire Lock1 first — so a process cannot hold Lock2
+without already having acquired (and still holding, or having released)
+Lock1 first. It is therefore impossible for a process to hold Lock2 while
+still waiting on Lock1, and the wait-for graph can never close into a
+cycle.
+
+This generalizes directly to n resources and n processes: if every process
+requests resources in increasing order of a fixed global rank, no process
+can ever wait on a resource "behind" one it already holds, so the
+resource-allocation graph is guaranteed to remain acyclic. This is the same
+principle applied at larger scale in syncdeadlock.c (Q4), with three
+resource types instead of two.
+
+Trade-off
+---------
+Resource ordering trades some flexibility for a hard guarantee: processes
+may occasionally hold a resource longer than strictly necessary while
+waiting to acquire the next one in order, even if they don't need it yet.
+For this assignment's scale, that cost is negligible compared to the
+correctness guarantee it buys.
+================================================================
