@@ -3,7 +3,7 @@
 **Student Name:** Ankit Basu
 **Roll Number:** 2401MC06
 **Course:** Operating Systems Lab
-**Assignment:** Assignment 5 - Process Synchronization
+**Assignment:** Assignment 5
 
 ---
 
