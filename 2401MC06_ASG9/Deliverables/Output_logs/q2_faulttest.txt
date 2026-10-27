@@ -1,0 +1,31 @@
+qemu-system-i386 -nographic -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp 2 -m 512 
+c[?7l[2J[0mSeaBIOS (version 1.17.0-debian-1.17.0-1ubuntu1)
+
+
+iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+1EFC8E00+1EF08E00 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Hard Disk..xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ faulttest
+faulttest
+faulttest: starting lazy allocation test...
+faulttest: initial page faults = 0
+faulttest: reserving 32 pages with sbrk(131072)...
+faulttest: faults immediately after sbrk (lazy check) = 0
+faulttest: writing to exactly 5 different pages (pages 0, 4, 10, 20, 31)...
+faulttest: page faults handled = 5 (expected: 5)
+faulttest: SUCCESS - exactly 5 page faults were handled!
+
+faulttest: testing invalid access above allocated size in child process...
+faulttest: child (pid 4) attempting access at invalid address 0x24000...
+pid 4: invalid memory access at 0x24000
+faulttest: child process was killed by kernel as expected.
+faulttest: parent process is alive and unaffected.
+faulttest: ALL TESTS PASSED SUCCESSFULLY.
+$ x
+QEMU: Terminated
+

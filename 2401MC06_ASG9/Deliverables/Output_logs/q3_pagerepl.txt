@@ -1,0 +1,86 @@
+qemu-system-i386 -nographic -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp 2 -m 512 
+c[?7l[2J[0mSeaBIOS (version 1.17.0-debian-1.17.0-1ubuntu1)
+
+
+iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+1EFC8E00+1EF08E00 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Hard Disk..xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ pagerepl
+pagerepl
+========================================================
+ Operating Systems Assignment 9 - Question 3: Page Repl 
+ Reference string: 7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1
+ Total references: 20
+========================================================
+
+>>> Question 3(b): 3 Frames Detailed Execution <<<
+
+--- FIFO Simulation (3 frames, 20 references) ---
+Step 1: Ref 7 -> [  7  -  - ] [FAULT]
+Step 2: Ref 0 -> [  7  0  - ] [FAULT]
+Step 3: Ref 1 -> [  7  0  1 ] [FAULT]
+Step 4: Ref 2 -> [  2  0  1 ] [FAULT]
+Step 5: Ref 0 -> [  2  0  1 ] [HIT]
+Step 6: Ref 3 -> [  2  3  1 ] [FAULT]
+Step 7: Ref 0 -> [  2  3  0 ] [FAULT]
+Step 8: Ref 4 -> [  4  3  0 ] [FAULT]
+Step 9: Ref 2 -> [  4  2  0 ] [FAULT]
+Step 10: Ref 3 -> [  4  2  3 ] [FAULT]
+Step 11: Ref 0 -> [  0  2  3 ] [FAULT]
+Step 12: Ref 3 -> [  0  2  3 ] [HIT]
+Step 13: Ref 2 -> [  0  2  3 ] [HIT]
+Step 14: Ref 1 -> [  0  1  3 ] [FAULT]
+Step 15: Ref 2 -> [  0  1  2 ] [FAULT]
+Step 16: Ref 0 -> [  0  1  2 ] [HIT]
+Step 17: Ref 1 -> [  0  1  2 ] [HIT]
+Step 18: Ref 7 -> [  7  1  2 ] [FAULT]
+Step 19: Ref 0 -> [  7  0  2 ] [FAULT]
+Step 20: Ref 1 -> [  7  0  1 ] [FAULT]
+FIFO Results: Page Faults = 15, Hits = 5, Hit Ratio = 25.00%
+
+--- LRU Simulation (3 frames, 20 references) ---
+Step 1: Ref 7 -> [  7  -  - ] [FAULT]
+Step 2: Ref 0 -> [  7  0  - ] [FAULT]
+Step 3: Ref 1 -> [  7  0  1 ] [FAULT]
+Step 4: Ref 2 -> [  2  0  1 ] [FAULT]
+Step 5: Ref 0 -> [  2  0  1 ] [HIT]
+Step 6: Ref 3 -> [  2  0  3 ] [FAULT]
+Step 7: Ref 0 -> [  2  0  3 ] [HIT]
+Step 8: Ref 4 -> [  4  0  3 ] [FAULT]
+Step 9: Ref 2 -> [  4  0  2 ] [FAULT]
+Step 10: Ref 3 -> [  4  3  2 ] [FAULT]
+Step 11: Ref 0 -> [  0  3  2 ] [FAULT]
+Step 12: Ref 3 -> [  0  3  2 ] [HIT]
+Step 13: Ref 2 -> [  0  3  2 ] [HIT]
+Step 14: Ref 1 -> [  1  3  2 ] [FAULT]
+Step 15: Ref 2 -> [  1  3  2 ] [HIT]
+Step 16: Ref 0 -> [  1  0  2 ] [FAULT]
+Step 17: Ref 1 -> [  1  0  2 ] [HIT]
+Step 18: Ref 7 -> [  1  0  7 ] [FAULT]
+Step 19: Ref 0 -> [  1  0  7 ] [HIT]
+Step 20: Ref 1 -> [  1  0  7 ] [HIT]
+LRU Results: Page Faults = 12, Hits = 8, Hit Ratio = 40.00%
+
+Verification for 3 frames:
+  FIFO expected: 15 faults | Actual: 15 (PASS)
+  LRU  expected: 12 faults | Actual: 12 (PASS)
+
+>>> Question 3(c): Comparison for 3, 4, and 5 Frames <<<
++--------+-------------------------+-------------------------+
+| Frames |       FIFO Algorithm    |       LRU Algorithm     |
+|        | Faults | Hit Ratio      | Faults | Hit Ratio      |
++--------+--------+----------------+--------+----------------+
+|   3    |   15   | 25.00%          |   12    | 40.00%          |
+|   4    |   10   | 50.00%          |   8    | 60.00%          |
+|   5    |   9   | 55.00%          |   7    | 65.00%          |
++--------+--------+----------------+--------+----------------+
+
+All Question 3 tasks completed successfully.
+$ x
+QEMU: Terminated
+

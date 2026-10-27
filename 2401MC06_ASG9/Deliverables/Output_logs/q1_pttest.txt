@@ -1,0 +1,40 @@
+qemu-system-i386 -nographic -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp 2 -m 512 
+c[?7l[2J[0mSeaBIOS (version 1.17.0-debian-1.17.0-1ubuntu1)
+
+
+iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+1EFC8E00+1EF08E00 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Hard Disk..xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ pttest
+pttest
+pttest: calling vmprint() at start-up...
+Page table for process 3 (pttest):
+  va: 0x0, pa: 0xdee8000, [P=1, W=1, U=1]
+  va: 0x1000, pa: 0xdee6000, [P=1, W=1, U=0]
+  va: 0x2000, pa: 0xdee5000, [P=1, W=1, U=1]
+Total valid user pages: 3
+Total page-table pages: 1
+
+pttest: calling sbrk(4 * 4096) to allocate 4 pages...
+
+pttest: calling vmprint() after sbrk(4 * 4096)...
+Page table for process 3 (pttest):
+  va: 0x0, pa: 0xdee8000, [P=1, W=1, U=1]
+  va: 0x1000, pa: 0xdee6000, [P=1, W=1, U=0]
+  va: 0x2000, pa: 0xdee5000, [P=1, W=1, U=1]
+  va: 0x3000, pa: 0xdfbc000, [P=1, W=1, U=1]
+  va: 0x4000, pa: 0xdf76000, [P=1, W=1, U=1]
+  va: 0x5000, pa: 0xdfbf000, [P=1, W=1, U=1]
+  va: 0x6000, pa: 0xdfc0000, [P=1, W=1, U=1]
+Total valid user pages: 7
+Total page-table pages: 1
+
+pttest: test finished successfully.
+$ x
+QEMU: Terminated
+
