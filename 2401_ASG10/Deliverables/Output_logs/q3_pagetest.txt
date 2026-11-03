@@ -1,0 +1,38 @@
+qemu-system-i386 -nographic -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp 2 -m 512 
+c[?7l[2J[0mSeaBIOS (version 1.17.0-debian-1.17.0-1ubuntu1)
+
+
+iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+1EFC8E00+1EF08E00 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Hard Disk..xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ pagetest
+pagetest
+
+=======================================================
+  Question 3: Paging & Page Protection Test            
+=======================================================
+
+[pagetest] Step 1: Allocating a 4KB memory page using sbrk(4096)...
+[pagetest] Step 2: Wrote "XY" to 0x4000. Read/Write initial state verified.
+[pagetest] Step 3: Displaying page info before protection:
+VA: 0x4000 -> Frame: 0xdfbc (57276), Flags: P=1, W=1, U=1
+[pagetest] Step 4: Changing page 0x4000 to read-only via setreadonly()...
+[setreadonly] VA 0x4000 set to read-only (PTE_W cleared).
+[pagetest] Step 5: Displaying page info after protection (PTE_W should be 0):
+VA: 0x4000 -> Frame: 0xdfbc (57276), Flags: P=1, W=0, U=1
+[pagetest] Step 6: Testing read access on read-only page: "XY"
+          Read succeeded without fault!
+[pagetest] Step 7: Demonstrating that writing to protected page causes page fault...
+[pagetest-child] Child (pid 4) attempting to write 'Z' to read-only page 0x4000...
+pid 4 pagetest: trap 14 err 7 on cpu 0 eip 0x118 addr 0x4000--kill proc
+[pagetest-parent] Child process 4 was killed by kernel due to trap/page fault!
+[pagetest-parent] Write protection successfully trapped by hardware MMU.
+[pagetest] Question 3 test completed successfully!
+
+$ xQEMU: Terminated
+

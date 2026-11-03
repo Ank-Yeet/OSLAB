@@ -1,0 +1,43 @@
+qemu-system-i386 -nographic -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp 2 -m 512 
+c[?7l[2J[0mSeaBIOS (version 1.17.0-debian-1.17.0-1ubuntu1)
+
+
+iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+1EFC8E00+1EF08E00 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Hard Disk..xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ vttest
+vttest
+
+=======================================================
+  Question 2: Virtual-to-Physical Address Translation 
+=======================================================
+
+[vttest] 1. Code Segment (main function):
+         Virtual Address  : 0x0
+         Physical Address : 0xDEE2000 (PFN: 0xDEE2, Offset: 0x0)
+[vttest] 2. Data Segment (&global_counter):
+         Virtual Address  : 0x1294
+         Physical Address : 0xDEE0294 (PFN: 0xDEE0, Offset: 0x294)
+[vttest] 3. User Stack Segment (&local_var):
+         Virtual Address  : 0x3FBC
+         Physical Address : 0xDEDEFBC (PFN: 0xDEDE, Offset: 0xFBC)
+[vttest] 4. Heap Memory via sbrk(8192) [2 pages]:
+         Heap Page 1 Base : VA=0x4000 -> PA=0xDFBC000 (PFN: 0xDFBC, Offset: 0x0)
+         Heap Page 1+0x2A4: VA=0x42A4 -> PA=0xDFBC2A4 (PFN: 0xDFBC, Offset: 0x2A4)
+         Heap Page 2 Base : VA=0x5000 -> PA=0xDF76000 (PFN: 0xDF76, Offset: 0x0)
+[vttest] 5. Demonstrating Unmapped Virtual Address:
+         Testing VA 0x60000000 ...
+         vtop(0x60000000) returned -1
+         Result: PASSED (Successfully identified as unmapped/invalid!)
+[vttest] 6. Testing After Heap Deallocation via sbrk(-8192):
+         vtop(0x4000) returned -1
+         Result: PASSED (Deallocated page is now unmapped!)
+[vttest] Question 2 test completed successfully!
+
+$ xQEMU: Terminated
+

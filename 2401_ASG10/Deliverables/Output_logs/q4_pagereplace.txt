@@ -1,0 +1,147 @@
+qemu-system-i386 -nographic -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp 2 -m 512 
+c[?7l[2J[0mSeaBIOS (version 1.17.0-debian-1.17.0-1ubuntu1)
+
+
+iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+1EFC8E00+1EF08E00 CA00
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
+
+
+Booting from Hard Disk..xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ pagereplace
+pagereplace
+
+=================================================================
+  Question 4: Page Replacement Algorithms (FIFO, LRU, Optimal)  
+=================================================================
+
+Reference String (20 references):
+  7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1
+
+*****************************************************************
+  Part (a) & (b): Detailed Traces with 3 Frames                  
+*****************************************************************
+
+--- FIFO Simulation (3 Frames) ---
+Step | Ref | Frames      | Status
+-----+-----+-------------+---------
+  1  |  7  | [ 7 - - ] | Page Fault
+  2  |  0  | [ 7 0 - ] | Page Fault
+  3  |  1  | [ 7 0 1 ] | Page Fault
+  4  |  2  | [ 2 0 1 ] | Page Fault
+  5  |  0  | [ 2 0 1 ] | Page Hit
+  6  |  3  | [ 2 3 1 ] | Page Fault
+  7  |  0  | [ 2 3 0 ] | Page Fault
+  8  |  4  | [ 4 3 0 ] | Page Fault
+  9  |  2  | [ 4 2 0 ] | Page Fault
+ 10  |  3  | [ 4 2 3 ] | Page Fault
+ 11  |  0  | [ 0 2 3 ] | Page Fault
+ 12  |  3  | [ 0 2 3 ] | Page Hit
+ 13  |  2  | [ 0 2 3 ] | Page Hit
+ 14  |  1  | [ 0 1 3 ] | Page Fault
+ 15  |  2  | [ 0 1 2 ] | Page Fault
+ 16  |  0  | [ 0 1 2 ] | Page Hit
+ 17  |  1  | [ 0 1 2 ] | Page Hit
+ 18  |  7  | [ 7 1 2 ] | Page Fault
+ 19  |  0  | [ 7 0 2 ] | Page Fault
+ 20  |  1  | [ 7 0 1 ] | Page Fault
+-----------------------------------
+FIFO Summary (3 frames): Page Faults = 15, Page Hits = 5
+
+
+--- LRU Simulation (3 Frames) ---
+Step | Ref | Frames      | Status
+-----+-----+-------------+---------
+  1  |  7  | [ 7 - - ] | Page Fault
+  2  |  0  | [ 7 0 - ] | Page Fault
+  3  |  1  | [ 7 0 1 ] | Page Fault
+  4  |  2  | [ 2 0 1 ] | Page Fault
+  5  |  0  | [ 2 0 1 ] | Page Hit
+  6  |  3  | [ 2 0 3 ] | Page Fault
+  7  |  0  | [ 2 0 3 ] | Page Hit
+  8  |  4  | [ 4 0 3 ] | Page Fault
+  9  |  2  | [ 4 0 2 ] | Page Fault
+ 10  |  3  | [ 4 3 2 ] | Page Fault
+ 11  |  0  | [ 0 3 2 ] | Page Fault
+ 12  |  3  | [ 0 3 2 ] | Page Hit
+ 13  |  2  | [ 0 3 2 ] | Page Hit
+ 14  |  1  | [ 1 3 2 ] | Page Fault
+ 15  |  2  | [ 1 3 2 ] | Page Hit
+ 16  |  0  | [ 1 0 2 ] | Page Fault
+ 17  |  1  | [ 1 0 2 ] | Page Hit
+ 18  |  7  | [ 1 0 7 ] | Page Fault
+ 19  |  0  | [ 1 0 7 ] | Page Hit
+ 20  |  1  | [ 1 0 7 ] | Page Hit
+-----------------------------------
+LRU Summary (3 frames): Page Faults = 12, Page Hits = 8
+
+
+--- Optimal Simulation (3 Frames) ---
+Step | Ref | Frames      | Status
+-----+-----+-------------+---------
+  1  |  7  | [ 7 - - ] | Page Fault
+  2  |  0  | [ 7 0 - ] | Page Fault
+  3  |  1  | [ 7 0 1 ] | Page Fault
+  4  |  2  | [ 2 0 1 ] | Page Fault
+  5  |  0  | [ 2 0 1 ] | Page Hit
+  6  |  3  | [ 2 0 3 ] | Page Fault
+  7  |  0  | [ 2 0 3 ] | Page Hit
+  8  |  4  | [ 2 4 3 ] | Page Fault
+  9  |  2  | [ 2 4 3 ] | Page Hit
+ 10  |  3  | [ 2 4 3 ] | Page Hit
+ 11  |  0  | [ 2 0 3 ] | Page Fault
+ 12  |  3  | [ 2 0 3 ] | Page Hit
+ 13  |  2  | [ 2 0 3 ] | Page Hit
+ 14  |  1  | [ 2 0 1 ] | Page Fault
+ 15  |  2  | [ 2 0 1 ] | Page Hit
+ 16  |  0  | [ 2 0 1 ] | Page Hit
+ 17  |  1  | [ 2 0 1 ] | Page Hit
+ 18  |  7  | [ 7 0 1 ] | Page Fault
+ 19  |  0  | [ 7 0 1 ] | Page Hit
+ 20  |  1  | [ 7 0 1 ] | Page Hit
+-----------------------------------
+Optimal Summary (3 frames): Page Faults = 9, Page Hits = 11
+
+Summary for 3 Frames:
+  FIFO    Total Page Faults: 15
+  LRU     Total Page Faults: 12
+  Optimal Total Page Faults: 9
+
+*****************************************************************
+  Part (c): Performance Comparison Across 3, 4, and 5 Frames     
+*****************************************************************
+
++--------+----------+-------------+-----------+-----------+------------------+
+| Frames | Policy   | Page Faults | Page Hits | Hit Ratio | Page Fault Ratio |
++--------+----------+-------------+-----------+-----------+------------------+
+|   3    | FIFO     |     15      |     5     |  25.00%   |      75.00%      |
+|   3    | LRU      |     12      |     8     |  40.00%   |      60.00%      |
+|   3    | Optimal  |      9      |    11     |  55.00%   |      45.00%      |
++--------+----------+-------------+-----------+-----------+------------------+
+|   4    | FIFO     |     10      |    10     |  50.00%   |      50.00%      |
+|   4    | LRU      |      8      |    12     |  60.00%   |      40.00%      |
+|   4    | Optimal  |      8      |    12     |  60.00%   |      40.00%      |
++--------+----------+-------------+-----------+-----------+------------------+
+|   5    | FIFO     |      9      |    11     |  55.00%   |      45.00%      |
+|   5    | LRU      |      7      |    13     |  65.00%   |      35.00%      |
+|   5    | Optimal  |      7      |    13     |  65.00%   |      35.00%      |
++--------+----------+-------------+-----------+-----------+------------------+
+
+Analysis & Observations:
+  1. Optimal Page Replacement performs BEST overall across all frame sizes,
+     producing the lowest fault counts: 9 (at 3 frames), 8 (at 4 frames),
+     and 7 (at 5 frames). Because Optimal has clairvoyant future knowledge,
+     it represents the theoretical lower bound on page faults.
+  2. LRU performs significantly better than FIFO across all frame sizes (12 vs 15
+     at 3 frames, 8 vs 10 at 4 frames, and 7 vs 9 at 5 frames). By exploiting
+     temporal locality, LRU accurately predicts future page re-use from recent
+     history, matching Optimal at 4 and 5 frames.
+  3. FIFO exhibits the highest page fault rate because it evicts pages based
+     strictly on arrival time, frequently evicting heavily accessed pages.
+
+[pagereplace] Question 4 completed successfully!
+
+$ xQEMU: Terminated
+
