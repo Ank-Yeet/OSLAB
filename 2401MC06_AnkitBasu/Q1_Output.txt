@@ -1,0 +1,19 @@
+SeaBIOS (version 1.17.0-debian-1.17.0-1ubuntu1)
+
+
+iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+1EFC8E00+1EF08E00 CA00
+                                                                               
+
+
+Booting from Hard Disk..xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ echo AnkitBasu 2401MC06
+AnkitBasu 2401MC06
+$ synctest
+A B C A B C A B C A B C A B C 
+Done
+Error checks: sem_init(8,1)=-1 sem_init(0,-1)=-1 sem_wait(-1)=-1 sem_post(9)=-1
+Uninitialised: sem_wait(5)=-1 sem_post(5)=-1
+

@@ -1,0 +1,24 @@
+SeaBIOS (version 1.17.0-debian-1.17.0-1ubuntu1)
+
+
+iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+1EFC8E00+1EF08E00 CA00
+                                                                               
+
+
+Booting from Hard Disk..xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ echo AnkitBasu 2401MC06
+AnkitBasu 2401MC06
+$ memtest
+(i)   freepages at start            : 56789
+(ii)  freepages after sbrk(10*4096) : 56779
+(iii) &global_var  va = 0xD88  pa = 0xDF2CD88
+(iv)  va2pa(0x7FFFFFFF) = -1
+(v)   freepages before fork         : 56779
+      child : va = 0xD88  pa = 0xDEE2D88
+      parent: va = 0xD88  pa = 0xDF2CD88
+      freepages after fork          : 56699
+      freepages after wait          : 56779 (before fork: 56779) OK, no leak
+
